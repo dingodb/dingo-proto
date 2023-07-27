@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package dingodb.pb.meta;
+
+option java_package = "io.dingodb.meta";
+option java_generic_services = true;
+
+message PartitionDetailDefinition {
+  string part_name = 1;
+  string operator = 2;
+  repeated string operand = 3;
+}
+
+message PartitionRule {
+  string func_name = 1;
+  repeated string columns = 2;
+  repeated PartitionDetailDefinition details = 3;
+}
+
+message IndexDefinition {
+  string name = 1;
+  uint32 version = 2;
+  PartitionRule index_partition = 3;
+  uint32 replica = 4;
+  dingodb.pb.common.IndexParameter index_parameter = 5;
+  bool with_auto_increment = 6;
+  uint64 auto_increment = 7;
+}
+
+message CreateIndexRequest {
+  string schema_name = 1;
+  IndexDefinition definition = 2;
+}
+
+message CreateIndexResponse {
+  bool state = 1;
+}
+
+message UpdateIndexRequest {
+  string schema_name = 1;
+  IndexDefinition definition = 2;
+}
+
+message UpdateIndexResponse {
+  bool state = 1;
+}
+
+message UpdateMaxElementsRequest {
+  string schema_name = 1;
+  string index_name = 2;
+  int32 max_elements = 3;
+}
+
+message UpdateMaxElementsResponse {
+  bool state = 1;
+}
+
+message DeleteIndexRequest {
+  string schema_name = 1;
+  string index_name = 2;
+}
+
+message DeleteIndexResponse {
+  bool state = 1;
+}
+
+message GetIndexRequest {
+  string schema_name = 1;
+  string index_name = 2;
+}
+
+message GetIndexResponse {
+  IndexDefinition definition = 1;
+}
+
+message GetIndexesRequest {
+  string schema_name = 1;
+}
+
+message GetIndexesResponse {
+  repeated IndexDefinition definitions = 1;
+}
+
+message GetIndexNamesRequest {
+  string schema_name = 1;
+}
+
+message GetIndexNamesResponse {
+  repeated string names = 1;
+}
+
+service MetaService {
+  rpc CreateIndex(CreateIndexRequest) returns (CreateIndexResponse);
+  rpc UpdateIndex(UpdateIndexRequest) returns (UpdateIndexResponse);
+  rpc UpdateMaxElements(UpdateMaxElementsRequest) returns (UpdateMaxElementsResponse);
+  rpc DeleteIndex(DeleteIndexRequest) returns (DeleteIndexResponse);
+  rpc GetIndex(GetIndexRequest) returns (GetIndexResponse);
+  rpc GetIndexes(GetIndexesRequest) returns (GetIndexesResponse);
+  rpc GetIndexNames(GetIndexNamesRequest) returns (GetIndexNamesResponse);
+}

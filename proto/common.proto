@@ -1,0 +1,230 @@
+syntax = "proto3";
+
+package dingodb.pb.common;
+
+option java_package = "io.dingodb.common";
+option java_generic_services = true;
+
+enum ValueType {
+  FLOAT = 0;
+  UINT8 = 1;
+}
+
+message Vector {
+  int32 dimension = 1;
+  ValueType value_type = 2;
+  repeated float float_values = 3;
+  repeated bytes binary_values = 4;
+}
+
+message VectorScalarData {
+  map<string, ScalarValue> scalar_data = 1;
+}
+
+message VectorTableData {
+  bytes table_key = 1;
+  bytes table_value = 2;
+}
+
+message VectorWithId {
+  uint64 id = 1;
+  Vector vector = 2;
+  VectorScalarData scalar_data = 3;
+  VectorTableData table_data = 4;
+}
+
+message VectorWithDistance {
+  VectorWithId vector_with_id = 1;
+  float distance = 2;
+  MetricType metric_type = 3;
+}
+
+message IndexParameter {
+  IndexType index_type = 1;
+  VectorIndexParameter vector_index_parameter = 2;
+  ScalarIndexParameter scalar_index_parameter = 3;
+}
+
+message CreateFlatParam {
+  // dimensions required
+  uint32 dimension = 1;
+
+  // distance calculation method (L2 or InnerProduct) required
+  MetricType metric_type = 2;
+}
+
+message CreateIvfFlatParam {
+  uint32 dimension = 1;
+
+  MetricType metric_type = 2;
+
+  int32 ncentroids = 3;
+}
+
+message CreateIvfPqParam {
+  uint32 dimension = 1;
+
+  // distance calculation method (L2 or InnerProduct) required
+  MetricType metric_type = 2;
+  int32 ncentroids = 3;
+  int32 nsubvector = 4;
+  int32 bucket_init_size = 5;
+
+}
+
+message CreateHnswParam {
+  uint32 dimension = 1;
+  MetricType metric_type = 2;
+  uint32 efConstruction = 3;
+  uint32 max_elements = 4;
+  int32 nlinks = 5;
+}
+
+message CreateDiskAnnParam {
+  uint32 dimension = 1;
+  MetricType metric_type = 2;
+  int32 num_trees = 3;
+  int32 num_neighbors = 4;
+  int32 num_threads = 5;
+}
+
+message VectorIndexParameter {
+  VectorIndexType vector_index_type = 1;
+  oneof vector_index_parameter {
+    CreateFlatParam flat_parameter = 2;
+    CreateIvfFlatParam ivf_flat_parameter = 3;
+    CreateIvfPqParam ivf_pq_parameter = 4;
+    CreateHnswParam hnsw_parameter = 5;
+    CreateDiskAnnParam diskann_parameter = 6;
+  }
+}
+
+enum ScalarIndexType {
+  SCALAR_INDEX_TYPE_NONE = 0;  // no scalar index, just a placeholder
+  SCALAR_INDEX_TYPE_LSM = 1;
+  SCALAR_INDEX_TYPE_BTREE = 2;
+}
+
+message ScalarIndexParameter {
+  ScalarIndexType scalar_index_type = 1;
+}
+
+enum IndexType {
+  INDEX_TYPE_NONE = 0;  // this is not index, for store region only
+  INDEX_TYPE_VECTOR = 1;
+  INDEX_TYPE_SCALAR = 2;
+}
+
+enum VectorIndexType {
+  VECTOR_INDEX_TYPE_NONE = 0;
+  VECTOR_INDEX_TYPE_FLAT = 1;
+  VECTOR_INDEX_TYPE_IVF_FLAT = 2;
+  VECTOR_INDEX_TYPE_IVF_PQ = 3;
+  VECTOR_INDEX_TYPE_HNSW = 4;
+  VECTOR_INDEX_TYPE_DISKANN = 5;
+}
+
+enum MetricType {
+  METRIC_TYPE_NONE = 0;  // this is a placeholder
+  METRIC_TYPE_L2 = 1;
+  METRIC_TYPE_INNER_PRODUCT = 2;
+  METRIC_TYPE_COSINE = 3;
+}
+
+message SearchFlatParam {
+  int32 parallel_on_queries = 1;
+}
+
+message SearchIvfFlatParam {
+  int32 nprobe = 1;
+
+  int32 parallel_on_queries = 2;
+}
+
+message SearchIvfPqParam {
+  int32 nprobe = 1;
+
+  int32 parallel_on_queries = 2;
+
+  int32 recall_num = 3;
+}
+
+message SearchHNSWParam {
+  int32 efSearch = 1;
+}
+
+message SearchDiskAnnParam {
+  // TODO : Not implement
+}
+
+message VectorSearchParameter {
+  uint32 top_n = 1;
+
+  bool with_out_vector_data = 2;
+  bool with_scalar_data = 3;
+  repeated string selected_keys = 4;
+  bool with_table_data = 5;
+
+  // The search method to use.
+  oneof search {
+    SearchFlatParam flat = 11;
+    SearchIvfFlatParam ivf_flat = 12;
+    SearchIvfPqParam ivf_pq = 13;
+    SearchHNSWParam hnsw = 14;
+    SearchDiskAnnParam diskann = 15;
+  }
+
+  // Whether to use scalar filtering.
+  bool use_scalar_filter = 20;
+}
+
+enum ScalarFieldType {
+  NONE = 0;
+  BOOL = 1;
+  INT8 = 2;
+  INT16 = 3;
+  INT32 = 4;
+  INT64 = 5;
+  FLOAT32 = 6;
+  DOUBLE = 7;
+  STRING = 8;
+  BYTES = 9;
+}
+
+message ScalarField {
+  oneof data {
+    bool bool_data = 1;
+    int32 int_data = 2;
+    int64 long_data = 3;
+    float float_data = 4;
+    double double_data = 5;
+    string string_data = 6;
+    bytes bytes_data = 7;
+  }
+}
+
+message ScalarValue {
+  // data type of scalar field
+  ScalarFieldType field_type = 1;
+  // scalar field, only one element in most cases
+  repeated ScalarField fields = 2;
+}
+
+message VectorIndexMetrics {
+  VectorIndexType vector_index_type = 1;
+
+  // current count
+  int64 current_count = 2;
+
+  // deleted count
+  int64 deleted_count = 3;
+
+  // max id
+  int64 max_id = 4;
+
+  // min id
+  int64 min_id = 5;
+
+  // memory unit bytes
+  int64 memory_bytes = 6;
+}
