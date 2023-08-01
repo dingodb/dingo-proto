@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-import "common.proto";
+import "proxy_common.proto";
 
-package dingodb.pb.index;
+package dingodb.pb.proxy.index;
 
-option java_package = "io.dingodb.index";
+option java_package = "io.dingodb.proxy.index";
 option java_generic_services = true;
 
 message VectorAddRequest {

@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-import "common.proto";
+import "proxy_common.proto";
 
-package dingodb.pb.meta;
+package dingodb.pb.proxy.meta;
 
-option java_package = "io.dingodb.meta";
+option java_package = "io.dingodb.proxy.meta";
 option java_generic_services = true;
 
 message PartitionDetailDefinition {

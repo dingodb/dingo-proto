@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package dingodb.pb.common;
+package dingodb.pb.proxy.common;
 
-option java_package = "io.dingodb.common";
+option java_package = "io.dingodb.proxy.common";
 option java_generic_services = true;
 
 enum ValueType {
