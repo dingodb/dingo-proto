@@ -24,7 +24,7 @@ message IndexDefinition {
   uint32 version = 2;
   PartitionRule index_partition = 3;
   uint32 replica = 4;
-  dingodb.pb.common.IndexParameter index_parameter = 5;
+  dingodb.pb.proxy.common.IndexParameter index_parameter = 5;
   bool with_auto_increment = 6;
   uint64 auto_increment = 7;
 }

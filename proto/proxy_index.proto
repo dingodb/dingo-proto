@@ -10,13 +10,13 @@ option java_generic_services = true;
 message VectorAddRequest {
   string schema_name = 1;
   string index_name = 2;
-  repeated dingodb.pb.common.VectorWithId vectors = 3;
+  repeated dingodb.pb.proxy.common.VectorWithId vectors = 3;
   bool replace_deleted = 4;
   bool is_update = 5;
 }
 
 message VectorAddResponse {
-  repeated dingodb.pb.common.VectorWithId vectors = 1;
+  repeated dingodb.pb.proxy.common.VectorWithId vectors = 1;
 }
 
 message VectorGetRequest {
@@ -31,18 +31,18 @@ message VectorGetRequest {
 }
 
 message VectorGetResponse {
-  repeated dingodb.pb.common.VectorWithId vectors = 1;
+  repeated dingodb.pb.proxy.common.VectorWithId vectors = 1;
 }
 
 message VectorSearchRequest {
   string schema_name = 1;
   string index_name = 2;
-  repeated dingodb.pb.common.VectorWithId vectors = 3;
-  dingodb.pb.common.VectorSearchParameter parameter = 4;
+  repeated dingodb.pb.proxy.common.VectorWithId vectors = 3;
+  dingodb.pb.proxy.common.VectorSearchParameter parameter = 4;
 }
 
 message VectorWithDistanceResult {
-  repeated dingodb.pb.common.VectorWithDistance vector_with_distances = 1;
+  repeated dingodb.pb.proxy.common.VectorWithDistance vector_with_distances = 1;
 }
 
 message VectorSearchResponse {
@@ -83,7 +83,7 @@ message VectorScanQueryRequest {
 }
 
 message VectorScanQueryResponse {
-  repeated dingodb.pb.common.VectorWithId vectors = 1;
+  repeated dingodb.pb.proxy.common.VectorWithId vectors = 1;
 }
 
 message VectorGetRegionMetricsRequest {
@@ -92,7 +92,7 @@ message VectorGetRegionMetricsRequest {
 }
 
 message VectorGetRegionMetricsResponse {
-  dingodb.pb.common.VectorIndexMetrics metrics = 1;
+  dingodb.pb.proxy.common.VectorIndexMetrics metrics = 1;
 }
 
 service IndexService {
