@@ -10,6 +10,18 @@ enum ValueType {
   UINT8 = 1;
 }
 
+message ColumnDefinition {
+  string name = 1;
+  string sql_type = 2;
+  string element_type = 3;
+  int32 precision = 4;
+  int32 scale = 5;
+  bool nullable = 6;
+  int32 indexOfKey = 7;
+  bool has_default_val = 8;
+  string default_val = 9;
+}
+
 message Vector {
   int32 dimension = 1;
   ValueType value_type = 2;
@@ -69,7 +81,7 @@ message CreateIvfPqParam {
   int32 ncentroids = 3;
   int32 nsubvector = 4;
   int32 bucket_init_size = 5;
-
+  int32 bucket_max_size = 6;
 }
 
 message CreateHnswParam {
@@ -97,6 +109,29 @@ message VectorIndexParameter {
     CreateHnswParam hnsw_parameter = 5;
     CreateDiskAnnParam diskann_parameter = 6;
   }
+}
+
+message VectorSchema {
+  enum Type {
+    BOOL = 0;
+    INTEGER = 1;
+    FLOAT = 2;
+    LONG = 3;
+    DOUBLE = 4;
+    STRING = 5;
+  };
+
+  // type of data
+  Type type = 1;
+
+  // Is primary key
+  bool is_key = 2;
+
+  // is allowed to be empty
+  bool is_nullable = 3;
+
+  // index position starts from 0
+  int32 index = 4;
 }
 
 enum ScalarIndexType {
@@ -129,6 +164,25 @@ enum MetricType {
   METRIC_TYPE_L2 = 1;
   METRIC_TYPE_INNER_PRODUCT = 2;
   METRIC_TYPE_COSINE = 3;
+}
+
+enum VectorFilter {
+  // filter vector scalar include post filter and pre filter
+  SCALAR_FILTER = 0;
+
+  // use coprocessor only include pre filter
+  TABLE_FILTER = 1;
+
+  // vector id search direct by ids. only include pre filter
+  VECTOR_ID_FILTER = 10;
+}
+
+enum VectorFilterType {
+  // first vector search, then filter
+  QUERY_POST = 0;
+
+  // first search from rocksdb, then search vector
+  QUERY_PRE = 1;
 }
 
 message SearchFlatParam {
@@ -175,7 +229,43 @@ message VectorSearchParameter {
   }
 
   // Whether to use scalar filtering.
+  // @Deprecated This field will be deprecated in the near future.
   bool use_scalar_filter = 20;
+
+  // filter source
+  VectorFilter vector_filter = 21;
+
+  // only include pre filter and post filter
+  VectorFilterType vector_filter_type = 22;
+
+  //  if vector_filter == TABLE_FILTER and  vector_query_type = QUERY_PRE enable vector_coprocessor
+  //  coprocessor request
+  VectorCoprocessor vector_coprocessor = 23;
+
+  // vector id array vector_filter == VECTOR_ID_FILTER enable vector_ids
+  repeated uint64 vector_ids = 24;
+}
+
+message VectorCoprocessor {
+  // the version of the serialized data
+  int32 schema_version = 1;
+
+  // original schema
+  VectorSchemaWrapper original_schema = 2;
+
+  // Column selection in the table list selection
+  // For example, [0, 2, 4, 7] selects the index subscript of the column.
+  // If the length of the array is 0, it means all
+  repeated int32 selection_columns = 3;
+
+  // The operator pushes down the expression binary filter to use empty to indicate that there is no expression and no
+  // filtering
+  bytes expression = 4;
+}
+
+message VectorSchemaWrapper {
+  repeated ColumnDefinition schema = 1;
+  int64 common_id = 2;
 }
 
 enum ScalarFieldType {

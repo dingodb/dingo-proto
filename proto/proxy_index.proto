@@ -80,6 +80,10 @@ message VectorScanQueryRequest {
   bool with_scalar_data = 12;
   repeated string selected_keys = 13;
   bool with_table_data = 14;
+
+  // Whether to use scalar filtering.
+  bool use_scalar_filter = 20;
+  dingodb.pb.proxy.common.VectorScalarData scalar_for_filter = 21;
 }
 
 message VectorScanQueryResponse {
