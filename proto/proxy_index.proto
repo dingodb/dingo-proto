@@ -75,6 +75,11 @@ message VectorScanQueryRequest {
   uint64 vector_id_start = 3;
   bool is_reverse_scan = 4;
   uint64 max_scan_count = 5;  // the max count user want to scan
+  uint64 vector_id_end = 6;   // the end id of scan, if is_reverse_scan is true, vector_id_end must be less than
+                              // vector_id_start, if is_reverse_scan is false, vector_id_end must be greater than
+                              // vector_id_start
+                              // the real range is [start, end], include start and end
+                              // if vector_id_end == 0, scan to the end of the region
 
   bool without_vector_data = 11;
   bool with_scalar_data = 12;
@@ -99,6 +104,48 @@ message VectorGetRegionMetricsResponse {
   dingodb.pb.proxy.common.VectorIndexMetrics metrics = 1;
 }
 
+enum AlgorithmType {
+  ALGORITHM_NONE = 0;
+  ALGORITHM_FAISS = 1;
+  ALGORITHM_HNSWLIB = 2;
+}
+
+message VectorDistance {
+  repeated float internal_distances = 1;
+}
+
+message VectorCalcDistanceRequest {
+  string schema_name = 1;
+  string index_name = 2;
+
+  uint64 vector_id = 3;
+  // which library algorithm to use
+  AlgorithmType algorithm_type = 4;
+  dingodb.pb.proxy.common.MetricType metric_type = 5;
+  // target vector arrays . empty do nothing. no error.
+  repeated dingodb.pb.proxy.common.Vector op_left_vectors = 6;
+
+  // source vector arrays . empty do nothing. no error.
+  repeated dingodb.pb.proxy.common.Vector op_right_vectors = 7;
+
+  // whether to return the normalized result.
+  bool is_return_normalize = 8;
+}
+
+message VectorCalcDistanceResponse {
+  string schema_name = 1;
+  string index_name = 2;
+
+  // return normalized result if is_return_normalize is true
+  repeated dingodb.pb.proxy.common.Vector op_left_vectors = 3;
+
+  // return normalized result if is_return_normalize is true
+  repeated dingodb.pb.proxy.common.Vector op_right_vectors = 4;
+
+  // num distance values = op_left_vectors *  op_right_vectors
+  repeated VectorDistance distances = 5;
+}
+
 service IndexService {
   rpc VectorAdd(VectorAddRequest) returns (VectorAddResponse);
   rpc VectorGet(VectorGetRequest) returns (VectorGetResponse);
@@ -107,4 +154,5 @@ service IndexService {
   rpc VectorGetBorderId(VectorGetBorderIdRequest) returns (VectorGetBorderIdResponse);
   rpc VectorScanQuery(VectorScanQueryRequest) returns (VectorScanQueryResponse);
   rpc VectorGetRegionMetrics(VectorGetRegionMetricsRequest) returns (VectorGetRegionMetricsResponse);
+  rpc VectorCalcDistance(VectorCalcDistanceRequest) returns (VectorCalcDistanceResponse);
 }
