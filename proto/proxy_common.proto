@@ -214,10 +214,10 @@ message SearchDiskAnnParam {
 message VectorSearchParameter {
   uint32 top_n = 1;
 
-  bool with_out_vector_data = 2;
-  bool with_scalar_data = 3;
+  bool without_vector_data = 2;
+  bool without_scalar_data = 3;
   repeated string selected_keys = 4;
-  bool with_table_data = 5;
+  bool without_table_data = 5;
 
   // The search method to use.
   oneof search {

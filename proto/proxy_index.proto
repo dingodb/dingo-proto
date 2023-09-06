@@ -23,11 +23,11 @@ message VectorGetRequest {
   string schema_name = 1;
   string index_name = 2;
   repeated uint64 vector_ids = 3;
-  bool with_out_vector_data = 4;
-  bool with_scalar_data = 5;
+  bool without_vector_data = 4;
+  bool without_scalar_data = 5;
   repeated string selected_keys = 6;
 
-  bool with_table_data = 7;
+  bool without_table_data = 7;
 }
 
 message VectorGetResponse {
@@ -82,9 +82,9 @@ message VectorScanQueryRequest {
                               // if vector_id_end == 0, scan to the end of the region
 
   bool without_vector_data = 11;
-  bool with_scalar_data = 12;
+  bool without_scalar_data = 12;
   repeated string selected_keys = 13;
-  bool with_table_data = 14;
+  bool without_table_data = 14;
 
   // Whether to use scalar filtering.
   bool use_scalar_filter = 20;
