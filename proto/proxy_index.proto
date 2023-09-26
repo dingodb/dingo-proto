@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "proxy_common.proto";
+import "proxy_error.proto";
 
 package dingodb.pb.proxy.index;
 
@@ -16,7 +17,8 @@ message VectorAddRequest {
 }
 
 message VectorAddResponse {
-  repeated dingodb.pb.proxy.common.VectorWithId vectors = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  repeated dingodb.pb.proxy.common.VectorWithId vectors = 2;
 }
 
 message VectorGetRequest {
@@ -31,7 +33,8 @@ message VectorGetRequest {
 }
 
 message VectorGetResponse {
-  repeated dingodb.pb.proxy.common.VectorWithId vectors = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  repeated dingodb.pb.proxy.common.VectorWithId vectors = 2;
 }
 
 message VectorSearchRequest {
@@ -46,7 +49,8 @@ message VectorWithDistanceResult {
 }
 
 message VectorSearchResponse {
-  repeated VectorWithDistanceResult batch_results = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  repeated VectorWithDistanceResult batch_results = 2;
 }
 
 message VectorDeleteRequest {
@@ -56,7 +60,8 @@ message VectorDeleteRequest {
 }
 
 message VectorDeleteResponse {
-  repeated bool key_states = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  repeated bool key_states = 2;
 }
 
 message VectorGetBorderIdRequest {
@@ -66,7 +71,8 @@ message VectorGetBorderIdRequest {
 }
 
 message VectorGetBorderIdResponse {
-  uint64 id = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  uint64 id = 2;
 }
 
 message VectorScanQueryRequest {
@@ -92,7 +98,8 @@ message VectorScanQueryRequest {
 }
 
 message VectorScanQueryResponse {
-  repeated dingodb.pb.proxy.common.VectorWithId vectors = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  repeated dingodb.pb.proxy.common.VectorWithId vectors = 2;
 }
 
 message VectorGetRegionMetricsRequest {
@@ -101,7 +108,8 @@ message VectorGetRegionMetricsRequest {
 }
 
 message VectorGetRegionMetricsResponse {
-  dingodb.pb.proxy.common.VectorIndexMetrics metrics = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  dingodb.pb.proxy.common.VectorIndexMetrics metrics = 2;
 }
 
 service IndexService {

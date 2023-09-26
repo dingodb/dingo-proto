@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "proxy_common.proto";
+
+package dingodb.pb.proxy.error;
+
+option java_package = "io.dingodb.proxy.error";
+option java_generic_services = true;
+
+enum Errno {
+  OK = 0;
+  EINTERNAL = 500;
+}
+
+message Error {
+  Errno errcode = 1;
+  string errmsg = 2;
+}

@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "proxy_common.proto";
+import "proxy_error.proto";
 
 package dingodb.pb.proxy.meta;
 
@@ -35,7 +36,8 @@ message CreateIndexRequest {
 }
 
 message CreateIndexResponse {
-  bool state = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  bool state = 2;
 }
 
 message UpdateIndexRequest {
@@ -44,7 +46,8 @@ message UpdateIndexRequest {
 }
 
 message UpdateIndexResponse {
-  bool state = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  bool state = 2;
 }
 
 message UpdateMaxElementsRequest {
@@ -54,7 +57,8 @@ message UpdateMaxElementsRequest {
 }
 
 message UpdateMaxElementsResponse {
-  bool state = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  bool state = 2;
 }
 
 message DeleteIndexRequest {
@@ -63,7 +67,8 @@ message DeleteIndexRequest {
 }
 
 message DeleteIndexResponse {
-  bool state = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  bool state = 2;
 }
 
 message GetIndexRequest {
@@ -72,7 +77,8 @@ message GetIndexRequest {
 }
 
 message GetIndexResponse {
-  IndexDefinition definition = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  IndexDefinition definition = 2;
 }
 
 message GetIndexesRequest {
@@ -80,7 +86,8 @@ message GetIndexesRequest {
 }
 
 message GetIndexesResponse {
-  repeated IndexDefinition definitions = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  repeated IndexDefinition definitions = 2;
 }
 
 message GetIndexNamesRequest {
@@ -88,7 +95,8 @@ message GetIndexNamesRequest {
 }
 
 message GetIndexNamesResponse {
-  repeated string names = 1;
+  dingodb.pb.proxy.error.Error error = 1;
+  repeated string names = 2;
 }
 
 message GetIndexMetricsRequest {
@@ -97,16 +105,17 @@ message GetIndexMetricsRequest {
 }
 
 message GetIndexMetricsResponse {
-  uint64 rows_count = 1;
-  bytes min_key = 2;
-  bytes max_key = 3;
-  uint64 part_count = 4;
-  dingodb.pb.proxy.common.VectorIndexType index_type = 5;
-  uint64 current_count = 6;
-  uint64 deleted_count = 7;
-  uint64 max_id = 8;
-  uint64 min_id = 9;
-  uint64 memory_bytes = 10;
+  dingodb.pb.proxy.error.Error error = 1;
+  uint64 rows_count = 2;
+  bytes min_key = 3;
+  bytes max_key = 4;
+  uint64 part_count = 5;
+  dingodb.pb.proxy.common.VectorIndexType index_type = 6;
+  uint64 current_count = 7;
+  uint64 deleted_count = 8;
+  uint64 max_id = 9;
+  uint64 min_id = 10;
+  uint64 memory_bytes = 11;
 }
 
 service MetaService {
