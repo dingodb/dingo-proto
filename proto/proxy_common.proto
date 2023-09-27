@@ -41,14 +41,16 @@ message VectorTableData {
 message VectorWithId {
   uint64 id = 1;
   Vector vector = 2;
-  VectorScalarData scalar_data = 3;
+  map<string, ScalarValue> scalar_data = 3;
   VectorTableData table_data = 4;
 }
 
 message VectorWithDistance {
-  VectorWithId vector_with_id = 1;
-  float distance = 2;
-  MetricType metric_type = 3;
+  uint64 id = 1;
+  Vector vector = 2;
+  map<string, ScalarValue> scalar_data = 3;
+  float distance = 4;
+  MetricType metric_type = 5;
 }
 
 message IndexParameter {
