@@ -112,6 +112,16 @@ message VectorGetRegionMetricsResponse {
   dingodb.pb.proxy.common.VectorIndexMetrics metrics = 2;
 }
 
+message VectorCountRequest {
+  string schema_name = 1;
+  string index_name = 2;
+}
+
+message VectorCountResponse {
+  dingodb.pb.proxy.error.Error error = 1;
+  uint64 count = 2;
+}
+
 service IndexService {
   rpc VectorAdd(VectorAddRequest) returns (VectorAddResponse);
   rpc VectorGet(VectorGetRequest) returns (VectorGetResponse);
@@ -120,5 +130,6 @@ service IndexService {
   rpc VectorGetBorderId(VectorGetBorderIdRequest) returns (VectorGetBorderIdResponse);
   rpc VectorScanQuery(VectorScanQueryRequest) returns (VectorScanQueryResponse);
   rpc VectorGetRegionMetrics(VectorGetRegionMetricsRequest) returns (VectorGetRegionMetricsResponse);
+  rpc VectorCount(VectorCountRequest) returns (VectorCountResponse);
 
 }
