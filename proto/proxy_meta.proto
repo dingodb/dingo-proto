@@ -22,12 +22,12 @@ message PartitionRule {
 
 message IndexDefinition {
   string name = 1;
-  uint32 version = 2;
+  int32 version = 2;
   PartitionRule index_partition = 3;
-  uint32 replica = 4;
+  int32 replica = 4;
   dingodb.pb.proxy.common.IndexParameter index_parameter = 5;
   bool with_auto_increment = 6;
-  uint64 auto_increment = 7;
+  int64 auto_increment = 7;
 }
 
 message CreateIndexRequest {
@@ -106,16 +106,16 @@ message GetIndexMetricsRequest {
 
 message GetIndexMetricsResponse {
   dingodb.pb.proxy.error.Error error = 1;
-  uint64 rows_count = 2;
+  int64 rows_count = 2;
   bytes min_key = 3;
   bytes max_key = 4;
-  uint64 part_count = 5;
+  int64 part_count = 5;
   dingodb.pb.proxy.common.VectorIndexType index_type = 6;
-  uint64 current_count = 7;
-  uint64 deleted_count = 8;
-  uint64 max_id = 9;
-  uint64 min_id = 10;
-  uint64 memory_bytes = 11;
+  int64 current_count = 7;
+  int64 deleted_count = 8;
+  int64 max_id = 9;
+  int64 min_id = 10;
+  int64 memory_bytes = 11;
 }
 
 service MetaService {

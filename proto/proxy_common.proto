@@ -39,14 +39,14 @@ message VectorTableData {
 }
 
 message VectorWithId {
-  uint64 id = 1;
+  int64 id = 1;
   Vector vector = 2;
   map<string, ScalarValue> scalar_data = 3;
   VectorTableData table_data = 4;
 }
 
 message VectorWithDistance {
-  uint64 id = 1;
+  int64 id = 1;
   Vector vector = 2;
   map<string, ScalarValue> scalar_data = 3;
   float distance = 4;
@@ -61,14 +61,14 @@ message IndexParameter {
 
 message CreateFlatParam {
   // dimensions required
-  uint32 dimension = 1;
+  int32 dimension = 1;
 
   // distance calculation method (L2 or InnerProduct) required
   MetricType metric_type = 2;
 }
 
 message CreateIvfFlatParam {
-  uint32 dimension = 1;
+  int32 dimension = 1;
 
   MetricType metric_type = 2;
 
@@ -76,7 +76,7 @@ message CreateIvfFlatParam {
 }
 
 message CreateIvfPqParam {
-  uint32 dimension = 1;
+  int32 dimension = 1;
 
   // distance calculation method (L2 or InnerProduct) required
   MetricType metric_type = 2;
@@ -87,15 +87,15 @@ message CreateIvfPqParam {
 }
 
 message CreateHnswParam {
-  uint32 dimension = 1;
+  int32 dimension = 1;
   MetricType metric_type = 2;
-  uint32 efConstruction = 3;
-  uint32 max_elements = 4;
+  int32 efConstruction = 3;
+  int32 max_elements = 4;
   int32 nlinks = 5;
 }
 
 message CreateDiskAnnParam {
-  uint32 dimension = 1;
+  int32 dimension = 1;
   MetricType metric_type = 2;
   int32 num_trees = 3;
   int32 num_neighbors = 4;
@@ -214,7 +214,7 @@ message SearchDiskAnnParam {
 }
 
 message VectorSearchParameter {
-  uint32 top_n = 1;
+  int32 top_n = 1;
 
   bool without_vector_data = 2;
   bool without_scalar_data = 3;
@@ -245,7 +245,7 @@ message VectorSearchParameter {
   VectorCoprocessor vector_coprocessor = 23;
 
   // vector id array vector_filter == VECTOR_ID_FILTER enable vector_ids
-  repeated uint64 vector_ids = 24;
+  repeated int64 vector_ids = 24;
 }
 
 message VectorCoprocessor {
