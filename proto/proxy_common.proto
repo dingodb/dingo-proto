@@ -84,6 +84,7 @@ message CreateIvfPqParam {
   int32 nsubvector = 4;
   int32 bucket_init_size = 5;
   int32 bucket_max_size = 6;
+  int32 nbits_per_idx = 7;
 }
 
 message CreateHnswParam {
