@@ -103,6 +103,12 @@ message CreateDiskAnnParam {
   int32 num_threads = 5;
 }
 
+message CreateBruteForceParam {
+  // dimensions required
+  uint32 dimension = 1;  // distance calculation method (L2 or InnerProduct) required
+  MetricType metric_type = 2;
+}
+
 message VectorIndexParameter {
   VectorIndexType vector_index_type = 1;
   oneof vector_index_parameter {
@@ -111,6 +117,7 @@ message VectorIndexParameter {
     CreateIvfPqParam ivf_pq_parameter = 4;
     CreateHnswParam hnsw_parameter = 5;
     CreateDiskAnnParam diskann_parameter = 6;
+    CreateBruteForceParam bruteforce_parameter = 7;
   }
 }
 
@@ -160,6 +167,7 @@ enum VectorIndexType {
   VECTOR_INDEX_TYPE_IVF_PQ = 3;
   VECTOR_INDEX_TYPE_HNSW = 4;
   VECTOR_INDEX_TYPE_DISKANN = 5;
+  VECTOR_INDEX_TYPE_BRUTEFORCE = 6;
 }
 
 enum MetricType {
