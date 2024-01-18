@@ -257,6 +257,8 @@ message VectorSearchParameter {
   repeated int64 vector_ids = 24;
 
   bool use_brute_force = 25;
+  
+  string langchain_expr = 40;
 }
 
 message VectorCoprocessor {
