@@ -125,6 +125,7 @@ message VectorCountResponse {
 service IndexService {
   rpc VectorAdd(VectorAddRequest) returns (VectorAddResponse);
   rpc VectorGet(VectorGetRequest) returns (VectorGetResponse);
+  rpc VectorUpsert(VectorAddRequest) returns (VectorAddResponse);
   rpc VectorSearch(VectorSearchRequest) returns (VectorSearchResponse);
   rpc VectorDelete(VectorDeleteRequest) returns (VectorDeleteResponse);
   rpc VectorGetBorderId(VectorGetBorderIdRequest) returns (VectorGetBorderIdResponse);
