@@ -8,6 +8,7 @@ option java_generic_services = true;
 enum ValueType {
   FLOAT = 0;
   UINT8 = 1;
+  INT8_T = 2;
 }
 
 message ColumnDefinition {
@@ -98,9 +99,15 @@ message CreateHnswParam {
 message CreateDiskAnnParam {
   int32 dimension = 1;
   MetricType metric_type = 2;
-  int32 num_trees = 3;
-  int32 num_neighbors = 4;
-  int32 num_threads = 5;
+  ValueType value_type = 3;
+  uint32 max_degree = 4;
+  uint32 search_list_size = 5;
+  uint32 qd = 6;
+  string codebook_prefix = 7;
+  uint32 pq_disk_bytes = 8;
+  bool append_reorder_data = 9;
+  uint32 build_pq_bytes = 10;
+  bool use_opq = 11;
 }
 
 message CreateBruteForceParam {
@@ -219,7 +226,7 @@ message SearchHNSWParam {
 }
 
 message SearchDiskAnnParam {
-  // TODO : Not implement
+  uint32 beamwidth = 1;
 }
 
 message VectorSearchParameter {
@@ -257,7 +264,7 @@ message VectorSearchParameter {
   repeated int64 vector_ids = 24;
 
   bool use_brute_force = 25;
-  
+
   string langchain_expr = 40;
 }
 
