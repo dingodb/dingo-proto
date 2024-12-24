@@ -116,6 +116,31 @@ message CreateBruteForceParam {
   MetricType metric_type = 2;
 }
 
+message CreateBinaryFlatParam{
+  // dimensions required
+  uint32 dimension = 1;
+  //only support hamming
+  MetricType metric_type = 2;
+
+  // The following parameters can be used by default for now. We will optimize them later.
+
+  //BinaryFlat Default option is EXACT_TOPK , APPROX_TOPK_BUCKETS_B16_D2 allows to trade accuracy vs speed ， so increases the speed
+  //Default is false
+  bool use_approximate_top_k = 3;
+
+}
+
+message CreateBinaryIvfFlatParam{
+  // dimensions required
+  uint32 dimension = 1;
+
+  //only support hamming
+  MetricType metric_type = 2;
+
+  // Number of cluster centers (default 2048) required
+  int32 ncentroids = 3;
+}
+
 message VectorIndexParameter {
   VectorIndexType vector_index_type = 1;
   oneof vector_index_parameter {
@@ -125,6 +150,9 @@ message VectorIndexParameter {
     CreateHnswParam hnsw_parameter = 5;
     CreateDiskAnnParam diskann_parameter = 6;
     CreateBruteForceParam bruteforce_parameter = 7;
+
+    CreateBinaryFlatParam binary_flat_parameter = 15;
+    CreateBinaryIvfFlatParam binary_ivf_flat_parameter = 16;
   }
 }
 
@@ -175,6 +203,9 @@ enum VectorIndexType {
   VECTOR_INDEX_TYPE_HNSW = 4;
   VECTOR_INDEX_TYPE_DISKANN = 5;
   VECTOR_INDEX_TYPE_BRUTEFORCE = 6;
+
+  VECTOR_INDEX_TYPE_BINARY_FLAT = 15;
+  VECTOR_INDEX_TYPE_BINARY_IVF_FLAT = 16;
 }
 
 enum MetricType {
@@ -182,6 +213,7 @@ enum MetricType {
   METRIC_TYPE_L2 = 1;
   METRIC_TYPE_INNER_PRODUCT = 2;
   METRIC_TYPE_COSINE = 3;
+  METRIC_TYPE_HAMMING = 4;
 }
 
 enum VectorFilter {
@@ -229,6 +261,25 @@ message SearchDiskAnnParam {
   uint32 beamwidth = 1;
 }
 
+message SearchBinaryFlatParam{
+  // query parallel mode
+  // Default 1, parallel between queries; 0, parallel in a single query.
+  // Inter-query parallelism refers to a single query that contains multiple vectors, and is parallelized between each
+  // vector query. optional
+  int32 parallel_on_queries = 1;
+}
+
+message SearchBinaryIvfFlatParam{
+  // How many buckets to query, the default is 80, and cannot exceed the size of ncentroids. Optional parameters
+  int32 nprobe = 1;
+
+  // Default 1, parallel between queries; 0, parallel in a single query.
+  // Inter-query parallelism refers to a query in which a single query contains multiple vectors, and is parallelized
+  // between each vector query. If there is only a single vector, it can be queried in parallel across nprobe buckets.
+  // optional parameters
+  int32 parallel_on_queries = 2;
+}
+
 message VectorSearchParameter {
   int32 top_n = 1;
 
@@ -244,6 +295,9 @@ message VectorSearchParameter {
     SearchIvfPqParam ivf_pq = 13;
     SearchHNSWParam hnsw = 14;
     SearchDiskAnnParam diskann = 15;
+
+    SearchBinaryFlatParam binary_flat = 30;
+    SearchBinaryIvfFlatParam binary_ivf_flat = 31;
   }
 
   // Whether to use scalar filtering.
